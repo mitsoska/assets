@@ -1,0 +1,547 @@
+[gd_scene load_steps=24 format=3 uid="uid://dkl3l4s5i0d7r"]
+
+[ext_resource type="Script" path="res://scripts/MainLogic.gd" id="1_1dnm4"]
+[ext_resource type="Texture2D" uid="uid://dx4gqt0bxxpfn" path="res://Assets/Images/Visuals/background.png" id="2_y2xdo"]
+[ext_resource type="Texture2D" uid="uid://dcwcwfrlmqioa" path="res://Assets/Images/Visuals/earth.png" id="3_awbqt"]
+[ext_resource type="Texture2D" uid="uid://ce2j2uj1f1ql0" path="res://Assets/Images/Visuals/buy_red.png" id="4_1i3jo"]
+[ext_resource type="PackedScene" uid="uid://b36o32svu8jen" path="res://scenes/progress_bar.tscn" id="4_vgdjd"]
+[ext_resource type="FontFile" uid="uid://djy0j2qufjfsy" path="res://Assets/04B_03__.TTF" id="5_gvdq5"]
+[ext_resource type="Texture2D" uid="uid://dj3kq8a0ej5b0" path="res://Assets/Images/Visuals/red.png" id="6_dnb3u"]
+[ext_resource type="Texture2D" uid="uid://p5l3cs1sxvk7" path="res://Assets/Images/Visuals/yellow.png" id="7_2thj6"]
+[ext_resource type="Texture2D" uid="uid://ccpc6rubjhpkw" path="res://Assets/Images/Visuals/black.png" id="8_gr3bi"]
+[ext_resource type="AudioStream" uid="uid://boexjj3ytw6mk" path="res://Assets/Audio/click.wav" id="9_qe6af"]
+[ext_resource type="Texture2D" uid="uid://cbjvi0v0rh06q" path="res://Assets/Images/Visuals/blue.png" id="9_u2ut5"]
+[ext_resource type="AudioStream" uid="uid://ds4cky6l86la2" path="res://Assets/Audio/Background.wav" id="10_mu5td"]
+[ext_resource type="AudioStream" uid="uid://chxdl187n3gxg" path="res://Assets/Audio/Not enough.wav" id="11_2dptt"]
+[ext_resource type="Script" path="res://scripts/Hover.gd" id="12_sngs7"]
+[ext_resource type="Script" path="res://scripts/Transition1.gd" id="13_48am0"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_5ep0k"]
+radius = 222.655
+
+[sub_resource type="LabelSettings" id="LabelSettings_dygi3"]
+font = ExtResource("5_gvdq5")
+font_size = 14
+
+[sub_resource type="LabelSettings" id="LabelSettings_0qi8j"]
+font = ExtResource("5_gvdq5")
+font_size = 10
+
+[sub_resource type="LabelSettings" id="LabelSettings_5dfu7"]
+font = ExtResource("5_gvdq5")
+font_size = 48
+font_color = Color(1, 0, 0, 1)
+
+[sub_resource type="LabelSettings" id="LabelSettings_jxtww"]
+font = ExtResource("5_gvdq5")
+
+[sub_resource type="Animation" id="Animation_jrqrt"]
+resource_name = "Fade_in"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("ColorRect:color")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(0, 0, 0, 1), Color(0, 0, 0, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_lynbs"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("ColorRect:color")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(0, 0, 0, 1)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_o2mwq"]
+_data = {
+"Fade_in": SubResource("Animation_jrqrt"),
+"RESET": SubResource("Animation_lynbs")
+}
+
+[node name="Node2D" type="Node2D"]
+script = ExtResource("1_1dnm4")
+
+[node name="Indicators" type="Node" parent="."]
+
+[node name="Bg" type="Sprite2D" parent="."]
+texture_filter = 1
+position = Vector2(320, 320)
+texture = ExtResource("2_y2xdo")
+
+[node name="Earth" type="Area2D" parent="."]
+texture_filter = 1
+position = Vector2(321, 347)
+scale = Vector2(0.939427, 0.895652)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Earth"]
+position = Vector2(2.12891, 5.58258)
+shape = SubResource("CircleShape2D_5ep0k")
+
+[node name="Sprite2D" type="Sprite2D" parent="Earth"]
+texture = ExtResource("3_awbqt")
+
+[node name="ProgressBar" parent="." instance=ExtResource("4_vgdjd")]
+position = Vector2(70, 25)
+
+[node name="Nutrients" type="Label" parent="."]
+texture_filter = 1
+offset_left = 274.0
+offset_top = 24.0
+offset_right = 358.0
+offset_bottom = 41.0
+text = "700"
+label_settings = SubResource("LabelSettings_dygi3")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Nutrients per sec" type="Label" parent="."]
+offset_left = 274.0
+offset_top = 9.0
+offset_right = 358.0
+offset_bottom = 23.0
+text = "Nutrition/s: 0
+"
+label_settings = SubResource("LabelSettings_0qi8j")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Buy red" type="TextureButton" parent="."]
+texture_filter = 1
+offset_left = 532.0
+offset_top = 522.0
+offset_right = 631.0
+offset_bottom = 621.0
+texture_normal = ExtResource("4_1i3jo")
+ignore_texture_size = true
+stretch_mode = 4
+
+[node name="Not enough" type="Label" parent="."]
+visible = false
+offset_left = 16.0
+offset_top = 73.0
+offset_right = 556.0
+offset_bottom = 175.0
+text = "Not enough nutrition!"
+label_settings = SubResource("LabelSettings_5dfu7")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="reds" type="Node" parent="."]
+
+[node name="PlantR1" type="Sprite2D" parent="reds"]
+visible = false
+position = Vector2(265, 331)
+scale = Vector2(0.8, 0.8)
+texture = ExtResource("6_dnb3u")
+
+[node name="PlantR2" type="Sprite2D" parent="reds"]
+visible = false
+position = Vector2(147, 332)
+scale = Vector2(0.8, 0.8)
+texture = ExtResource("6_dnb3u")
+
+[node name="PlantR3" type="Sprite2D" parent="reds"]
+visible = false
+position = Vector2(267, 283)
+scale = Vector2(0.8, 0.8)
+texture = ExtResource("6_dnb3u")
+
+[node name="PlantR4" type="Sprite2D" parent="reds"]
+visible = false
+position = Vector2(203, 301)
+scale = Vector2(0.8, 0.8)
+texture = ExtResource("6_dnb3u")
+
+[node name="PlantR5" type="Sprite2D" parent="reds"]
+visible = false
+position = Vector2(157, 282)
+scale = Vector2(0.8, 0.8)
+texture = ExtResource("6_dnb3u")
+
+[node name="PlantR6" type="Sprite2D" parent="reds"]
+visible = false
+position = Vector2(230, 261)
+scale = Vector2(0.8, 0.8)
+texture = ExtResource("6_dnb3u")
+
+[node name="PlantR7" type="Sprite2D" parent="reds"]
+visible = false
+position = Vector2(187, 248)
+scale = Vector2(0.8, 0.8)
+texture = ExtResource("6_dnb3u")
+
+[node name="PlantR8" type="Sprite2D" parent="reds"]
+visible = false
+position = Vector2(281, 234)
+scale = Vector2(0.8, 0.8)
+texture = ExtResource("6_dnb3u")
+
+[node name="PlantR9" type="Sprite2D" parent="reds"]
+visible = false
+position = Vector2(266, 200)
+scale = Vector2(0.8, 0.8)
+texture = ExtResource("6_dnb3u")
+
+[node name="PlantR10" type="Sprite2D" parent="reds"]
+visible = false
+position = Vector2(214, 215)
+scale = Vector2(0.8, 0.8)
+texture = ExtResource("6_dnb3u")
+
+[node name="PlantR11" type="Sprite2D" parent="reds"]
+visible = false
+position = Vector2(301, 179)
+scale = Vector2(0.8, 0.8)
+texture = ExtResource("6_dnb3u")
+
+[node name="oranges" type="Node" parent="."]
+
+[node name="PlantO" type="Sprite2D" parent="oranges"]
+visible = false
+position = Vector2(343, 185)
+scale = Vector2(0.8, 0.8)
+texture = ExtResource("7_2thj6")
+
+[node name="PlantO2" type="Sprite2D" parent="oranges"]
+visible = false
+position = Vector2(353, 236)
+scale = Vector2(0.8, 0.8)
+texture = ExtResource("7_2thj6")
+
+[node name="PlantO3" type="Sprite2D" parent="oranges"]
+visible = false
+position = Vector2(407, 208)
+scale = Vector2(0.8, 0.8)
+texture = ExtResource("7_2thj6")
+
+[node name="PlantO4" type="Sprite2D" parent="oranges"]
+visible = false
+position = Vector2(451, 233)
+scale = Vector2(0.8, 0.8)
+texture = ExtResource("7_2thj6")
+
+[node name="PlantO5" type="Sprite2D" parent="oranges"]
+visible = false
+position = Vector2(421, 257)
+scale = Vector2(0.8, 0.8)
+texture = ExtResource("7_2thj6")
+
+[node name="PlantO6" type="Sprite2D" parent="oranges"]
+visible = false
+position = Vector2(389, 267)
+scale = Vector2(0.8, 0.8)
+texture = ExtResource("7_2thj6")
+
+[node name="PlantO7" type="Sprite2D" parent="oranges"]
+visible = false
+position = Vector2(481, 312)
+scale = Vector2(0.8, 0.8)
+texture = ExtResource("7_2thj6")
+
+[node name="PlantO8" type="Sprite2D" parent="oranges"]
+visible = false
+position = Vector2(427.2, 311.8)
+scale = Vector2(0.8, 0.8)
+texture = ExtResource("7_2thj6")
+
+[node name="PlantO9" type="Sprite2D" parent="oranges"]
+visible = false
+position = Vector2(471, 272)
+scale = Vector2(0.8, 0.8)
+texture = ExtResource("7_2thj6")
+
+[node name="PlantO10" type="Sprite2D" parent="oranges"]
+visible = false
+position = Vector2(352, 279)
+scale = Vector2(0.8, 0.8)
+texture = ExtResource("7_2thj6")
+
+[node name="PlantO11" type="Sprite2D" parent="oranges"]
+visible = false
+position = Vector2(377, 323)
+scale = Vector2(0.8, 0.8)
+texture = ExtResource("7_2thj6")
+
+[node name="darks" type="Node" parent="."]
+
+[node name="PlantD" type="Sprite2D" parent="darks"]
+visible = false
+position = Vector2(436, 365)
+scale = Vector2(0.7, 0.7)
+texture = ExtResource("8_gr3bi")
+
+[node name="PlantD2" type="Sprite2D" parent="darks"]
+visible = false
+position = Vector2(381, 384)
+scale = Vector2(0.7, 0.7)
+texture = ExtResource("8_gr3bi")
+
+[node name="PlantD3" type="Sprite2D" parent="darks"]
+visible = false
+position = Vector2(342, 369)
+scale = Vector2(0.7, 0.7)
+texture = ExtResource("8_gr3bi")
+
+[node name="PlantD4" type="Sprite2D" parent="darks"]
+visible = false
+position = Vector2(433, 402)
+scale = Vector2(0.7, 0.7)
+texture = ExtResource("8_gr3bi")
+
+[node name="PlantD5" type="Sprite2D" parent="darks"]
+visible = false
+position = Vector2(492, 380)
+scale = Vector2(0.7, 0.7)
+texture = ExtResource("8_gr3bi")
+
+[node name="PlantD6" type="Sprite2D" parent="darks"]
+visible = false
+position = Vector2(356, 419)
+scale = Vector2(0.7, 0.7)
+texture = ExtResource("8_gr3bi")
+
+[node name="PlantD7" type="Sprite2D" parent="darks"]
+visible = false
+position = Vector2(462, 434)
+scale = Vector2(0.7, 0.7)
+texture = ExtResource("8_gr3bi")
+
+[node name="PlantD8" type="Sprite2D" parent="darks"]
+visible = false
+position = Vector2(395, 430)
+scale = Vector2(0.7, 0.7)
+texture = ExtResource("8_gr3bi")
+
+[node name="PlantD9" type="Sprite2D" parent="darks"]
+visible = false
+position = Vector2(420, 456)
+scale = Vector2(0.7, 0.7)
+texture = ExtResource("8_gr3bi")
+
+[node name="PlantD10" type="Sprite2D" parent="darks"]
+visible = false
+position = Vector2(361, 464)
+scale = Vector2(0.7, 0.7)
+texture = ExtResource("8_gr3bi")
+
+[node name="PlantD11" type="Sprite2D" parent="darks"]
+visible = false
+position = Vector2(399, 492)
+scale = Vector2(0.7, 0.7)
+texture = ExtResource("8_gr3bi")
+
+[node name="PlantD12" type="Sprite2D" parent="darks"]
+visible = false
+position = Vector2(350, 512)
+scale = Vector2(0.7, 0.7)
+texture = ExtResource("8_gr3bi")
+
+[node name="blues" type="Node" parent="."]
+
+[node name="PlantB" type="Sprite2D" parent="blues"]
+visible = false
+position = Vector2(198, 364)
+scale = Vector2(0.8, 0.8)
+texture = ExtResource("9_u2ut5")
+
+[node name="PlantB2" type="Sprite2D" parent="blues"]
+visible = false
+position = Vector2(296, 489)
+scale = Vector2(0.8, 0.8)
+texture = ExtResource("9_u2ut5")
+
+[node name="PlantB3" type="Sprite2D" parent="blues"]
+visible = false
+position = Vector2(295, 404)
+scale = Vector2(0.8, 0.8)
+texture = ExtResource("9_u2ut5")
+
+[node name="PlantB4" type="Sprite2D" parent="blues"]
+visible = false
+position = Vector2(249, 377)
+scale = Vector2(0.8, 0.8)
+texture = ExtResource("9_u2ut5")
+
+[node name="PlantB5" type="Sprite2D" parent="blues"]
+visible = false
+position = Vector2(237, 477)
+scale = Vector2(0.8, 0.8)
+texture = ExtResource("9_u2ut5")
+
+[node name="PlantB6" type="Sprite2D" parent="blues"]
+visible = false
+position = Vector2(278, 445)
+scale = Vector2(0.8, 0.8)
+texture = ExtResource("9_u2ut5")
+
+[node name="PlantB7" type="Sprite2D" parent="blues"]
+visible = false
+position = Vector2(243, 422)
+scale = Vector2(0.8, 0.8)
+texture = ExtResource("9_u2ut5")
+
+[node name="PlantB8" type="Sprite2D" parent="blues"]
+visible = false
+position = Vector2(193, 452)
+scale = Vector2(0.8, 0.8)
+texture = ExtResource("9_u2ut5")
+
+[node name="PlantB9" type="Sprite2D" parent="blues"]
+visible = false
+position = Vector2(215, 408)
+scale = Vector2(0.8, 0.8)
+texture = ExtResource("9_u2ut5")
+
+[node name="PlantB10" type="Sprite2D" parent="blues"]
+visible = false
+position = Vector2(174, 418)
+scale = Vector2(0.8, 0.8)
+texture = ExtResource("9_u2ut5")
+
+[node name="PlantB11" type="Sprite2D" parent="blues"]
+visible = false
+position = Vector2(155, 381)
+scale = Vector2(0.8, 0.8)
+texture = ExtResource("9_u2ut5")
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("9_qe6af")
+volume_db = -2.0
+
+[node name="AudioStreamPlayer2" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("10_mu5td")
+autoplay = true
+
+[node name="AudioStreamPlayer3" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("11_2dptt")
+volume_db = -2.0
+
+[node name="Hover" type="Node" parent="."]
+script = ExtResource("12_sngs7")
+
+[node name="Hover red" type="Button" parent="Hover"]
+light_mask = 0
+visibility_layer = 0
+offset_left = 113.0
+offset_top = 152.0
+offset_right = 323.0
+offset_bottom = 352.0
+mouse_filter = 1
+flat = true
+
+[node name="Merge red" type="Button" parent="Hover"]
+visible = false
+offset_left = 185.0
+offset_top = 256.0
+offset_right = 302.0
+offset_bottom = 286.0
+mouse_filter = 1
+
+[node name="Label" type="Label" parent="Hover/Merge red"]
+layout_mode = 0
+offset_left = 2.0
+offset_top = 1.0
+offset_right = 116.0
+offset_bottom = 29.0
+text = "Merge 5 reds"
+label_settings = SubResource("LabelSettings_jxtww")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Hover Orange" type="Button" parent="Hover"]
+light_mask = 0
+visibility_layer = 0
+offset_left = 324.0
+offset_top = 152.0
+offset_right = 534.0
+offset_bottom = 352.0
+mouse_filter = 1
+flat = true
+
+[node name="Merge Orange" type="Button" parent="Hover"]
+visible = false
+offset_left = 328.0
+offset_top = 256.0
+offset_right = 479.0
+offset_bottom = 286.0
+mouse_filter = 1
+
+[node name="Label" type="Label" parent="Hover/Merge Orange"]
+layout_mode = 0
+offset_left = 2.0
+offset_top = 1.0
+offset_right = 116.0
+offset_bottom = 29.0
+text = "Merge 8 oranges"
+label_settings = SubResource("LabelSettings_jxtww")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Hover Dark" type="Button" parent="Hover"]
+light_mask = 0
+visibility_layer = 0
+offset_left = 324.0
+offset_top = 353.0
+offset_right = 534.0
+offset_bottom = 553.0
+mouse_filter = 1
+flat = true
+
+[node name="Merge Dark" type="Button" parent="Hover"]
+visible = false
+offset_left = 330.0
+offset_top = 398.0
+offset_right = 467.0
+offset_bottom = 428.0
+mouse_filter = 1
+
+[node name="Label" type="Label" parent="Hover/Merge Dark"]
+layout_mode = 0
+offset_left = 6.0
+offset_right = 141.0
+offset_bottom = 28.0
+text = "Merge 10 darks
+"
+label_settings = SubResource("LabelSettings_jxtww")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Transition" type="Node" parent="."]
+script = ExtResource("13_48am0")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="Transition"]
+libraries = {
+"": SubResource("AnimationLibrary_o2mwq")
+}
+
+[node name="ColorRect" type="ColorRect" parent="Transition"]
+visible = false
+offset_right = 638.0
+offset_bottom = 641.0
+color = Color(0, 0, 0, 1)
+
+[connection signal="input_event" from="Earth" to="." method="_on_earth_input_event"]
+[connection signal="pressed" from="Buy red" to="." method="_on_buy_red_pressed"]
+[connection signal="finished" from="AudioStreamPlayer2" to="." method="_on_audio_stream_player_2_finished"]
+[connection signal="mouse_entered" from="Hover/Hover red" to="Hover" method="_on_hover_red_mouse_entered"]
+[connection signal="mouse_exited" from="Hover/Hover red" to="Hover" method="_on_hover_red_mouse_exited"]
+[connection signal="pressed" from="Hover/Merge red" to="." method="_on_merge_red_pressed"]
+[connection signal="mouse_entered" from="Hover/Hover Orange" to="Hover" method="_on_hover_orange_mouse_entered"]
+[connection signal="mouse_exited" from="Hover/Hover Orange" to="Hover" method="_on_hover_orange_mouse_exited"]
+[connection signal="pressed" from="Hover/Merge Orange" to="." method="_on_merge_orange_pressed"]
+[connection signal="mouse_entered" from="Hover/Hover Dark" to="Hover" method="_on_hover_dark_mouse_entered"]
+[connection signal="mouse_exited" from="Hover/Hover Dark" to="Hover" method="_on_hover_dark_mouse_exited"]
+[connection signal="pressed" from="Hover/Merge Dark" to="." method="_on_merge_dark_pressed"]
